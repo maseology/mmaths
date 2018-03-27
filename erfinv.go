@@ -1,0 +1,31 @@
+package maths
+
+import (
+	. "math"
+)
+
+// Erfinv returns the inverse error function of x
+func Erfinv(x float64) float64 {
+	// approximation of the inverse error function, maximum error of 0.00012
+	// see: Winitzki 2008 A handy approximation for the error function and its inverse
+	if x < -1. || x > 1. {
+		// log.Panicf("Erfinv: input out of range")
+		return NaN()
+	} else if Abs(x) == 1. {
+		return Inf(int(x))
+	} else if x == 0 {
+		return 0.
+	}
+	a := 8. * (Pi - 3.) / (3. * Pi * (4. - Pi)) // 0.147 // 0.140012
+	// p0 := Log(1. - Pow(x, 2))
+	// p1 := -2. / (Pi * a)
+	// p2 := 0.5 * p0
+	// p3 := Sqrt(Pow(2./(Pi*a)+0.5*p0, 2.))
+	// return Copysign(1., x) * Sqrt(p1-p2+p3-p0/a)
+	p0 := Log(1. - Pow(x, 2))
+	p1 := 2. / (Pi * a)
+	p2 := p0 / 2.
+	p3 := Pow(p1+p2, 2.)
+	p4 := p0 / a
+	return Copysign(1., x) * Sqrt(-p1-p2+Sqrt(p3-p4))
+}
