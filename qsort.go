@@ -1,4 +1,4 @@
-package maths
+package mmaths
 
 import (
 	"math/rand"
@@ -112,37 +112,37 @@ type QsortIndxInterface interface {
 
 // IndexedSlice : alias to float array being sorted
 type IndexedSlice struct {
-	indx []int
-	val  []float64
+	Indx []int
+	Val  []float64
 }
 
 // Indices : returns the index property
 func (is IndexedSlice) Indices() []int {
-	return is.indx
+	return is.Indx
 }
 
 func (is IndexedSlice) Len() int {
-	return len(is.indx)
+	return len(is.Indx)
 }
 
 func (is IndexedSlice) Less(i, j int) bool {
-	return is.val[i] < is.val[j]
+	return is.Val[i] < is.Val[j]
 }
 
 func (is IndexedSlice) Swap(i, j int) {
-	is.indx[i], is.indx[j] = is.indx[j], is.indx[i]
-	is.val[i], is.val[j] = is.val[j], is.val[i]
+	is.Indx[i], is.Indx[j] = is.Indx[j], is.Indx[i]
+	is.Val[i], is.Val[j] = is.Val[j], is.Val[i]
 }
 
 // Partition : splits index array around pivot
 func (is IndexedSlice) Partition(i int) (left QsortIndxInterface, right QsortIndxInterface) {
 	left = IndexedSlice{
-		indx: is.indx[:i],
-		val:  is.val[:i],
+		Indx: is.Indx[:i],
+		Val:  is.Val[:i],
 	}
 	right = IndexedSlice{
-		indx: is.indx[i+1:],
-		val:  is.val[i+1:],
+		Indx: is.Indx[i+1:],
+		Val:  is.Val[i+1:],
 	}
 	return
 }

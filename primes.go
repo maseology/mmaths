@@ -1,4 +1,4 @@
-package maths
+package mmaths
 
 // Primes : brute-force finds the first k prime numbers
 func Primes(k int) []int {

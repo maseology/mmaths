@@ -1,4 +1,4 @@
-package maths
+package mmaths
 
 import (
 	. "math"
