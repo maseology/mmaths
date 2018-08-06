@@ -2,6 +2,10 @@
 
 package mmaths
 
+import (
+	"math"
+)
+
 // Rev is quick function used to reverse order of a slice
 func Rev(s []int) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
@@ -23,4 +27,22 @@ func Sequential(n int) []int {
 		iout[i] = i
 	}
 	return iout
+}
+
+// SliceMax returns the maximum value of a slice
+func SliceMax(s []float64) float64 {
+	x := -math.MaxFloat64
+	for _, v := range s {
+		x = math.Max(x, v)
+	}
+	return x
+}
+
+// SliceMin returns the minimum value of a slice
+func SliceMin(s []float64) float64 {
+	x := math.MaxFloat64
+	for _, v := range s {
+		x = math.Min(x, v)
+	}
+	return x
 }

@@ -8,7 +8,7 @@ func PnPoly(v [][]float64, p []float64) bool {
 			b = !b
 		}
 	}
-	return b
+	return !b
 }
 
 // PnPolyC determins whether a point lies within a polygon (using complex coordinates)

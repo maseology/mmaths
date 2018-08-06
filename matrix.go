@@ -1,6 +1,9 @@
 package mmaths
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Matrix alias for a 2d slice
 type Matrix [][]float64
@@ -16,6 +19,19 @@ func (mt Matrix) Print() {
 		}
 		println()
 	}
+}
+
+// T transpose matrix
+func (mt Matrix) T() Matrix {
+	r, c := len(mt), len(mt[0])
+	var b Matrix = make([][]float64, c)
+	for j := 0; j < c; j++ {
+		b[j] = make([]float64, r)
+		for i := 0; i < r; i++ {
+			b[j][i] = mt[i][j]
+		}
+	}
+	return b
 }
 
 // Multiply matrices
@@ -101,4 +117,73 @@ func (mt Matrix) GaussJordanElimination() Matrix {
 		b[i] = a[i][m:]
 	}
 	return b
+}
+
+var t bool
+
+// GradientDescent is a first-order iterative optimization algorithm for finding the minimum of a function.
+// used to solve for x in Ax=B
+// from: https://stackoverflow.com/questions/16422287/linear-regression-library-for-go-language
+func GradientDescent(A Matrix, B []float64, n int, alpha float64) []float64 {
+	at := A.T()
+	x := make([]float64, len(at))
+	t = true
+
+	for i := 0; i < n; i++ {
+		diffs := calcDiff(x, B, at)
+		grad := calcGradient(diffs, at)
+
+		for j := 0; j < len(grad); j++ {
+			x[j] += alpha * grad[j]
+		}
+	}
+	return x
+}
+
+func calcDiff(x []float64, b []float64, a [][]float64) []float64 {
+	diffs := make([]float64, len(b))
+	for i := 0; i < len(b); i++ {
+		prediction := 0.0
+		for j := 0; j < len(x); j++ {
+			prediction += x[j] * a[j][i]
+		}
+		diffs[i] = b[i] - prediction
+		if t && math.IsNaN(diffs[i]) {
+			fmt.Println("diffs Nan")
+			fmt.Println(b[i], prediction)
+			fmt.Println(x)
+			t = false
+		}
+		if t && math.IsInf(diffs[i], 0) {
+			fmt.Println("diffs Inf")
+			fmt.Println(b[i], prediction)
+			fmt.Println(x)
+			t = false
+		}
+	}
+	return diffs
+}
+
+func calcGradient(diffs []float64, a [][]float64) []float64 {
+	gradient := make([]float64, len(a))
+	for i := 0; i < len(diffs); i++ {
+		for j := 0; j < len(a); j++ {
+			gradient[j] += diffs[i] * a[j][i]
+			if t && math.IsNaN(gradient[j]) {
+				fmt.Println("grad1")
+				fmt.Println(diffs[i], a[j][i], gradient[j])
+				t = false
+			}
+		}
+	}
+	for i := 0; i < len(a); i++ {
+		g1 := gradient[i]
+		gradient[i] = gradient[i] / float64(len(diffs))
+		if t && math.IsNaN(gradient[i]) {
+			fmt.Println("grad2")
+			fmt.Println(g1, gradient[i])
+			t = false
+		}
+	}
+	return gradient
 }
