@@ -4,7 +4,7 @@ import (
 	. "math"
 )
 
-// Erfinv returns the inverse error function of x
+// Erfinv returns the inverse error function of x // Erfinv now available in "math"
 func Erfinv(x float64) float64 {
 	// approximation of the inverse error function, maximum error of 0.00012
 	// see: Winitzki 2008 A handy approximation for the error function and its inverse
