@@ -20,7 +20,7 @@ func RevF(s []float64) {
 	}
 }
 
-// Sequential builds a n+1 lenght slice indexed from 0 to n
+// Sequential builds a n+1 length slice indexed from 0 to n
 func Sequential(n int) []int {
 	iout := make([]int, n+1)
 	for i := 0; i <= n; i++ {

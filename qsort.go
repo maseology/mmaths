@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// QsortInterface : interface to sort.Sort
+// QsortInterface interface to sort.Sort
 type QsortInterface interface {
 	sort.Interface
 	// Partition returns slice[:i] and slice[i+1:]
@@ -34,7 +34,7 @@ func (is IntSlice) Partition(i int) (left QsortInterface, right QsortInterface) 
 	return IntSlice(is[:i]), IntSlice(is[i+1:])
 }
 
-// Qsort : a (quick) sorting algorithm that is apparently faster then Go's native sort.Sort
+// Qsort a (quick) sorting algorithm that is apparently faster then Go's native sort.Sort
 // from: https://stackoverflow.com/questions/23276417/golang-custom-sort-is-faster-than-native-sort#23278451
 func Qsort(a QsortInterface, prng *rand.Rand) QsortInterface {
 	if a.Len() < 2 {
@@ -67,7 +67,7 @@ func Qsort(a QsortInterface, prng *rand.Rand) QsortInterface {
 	return a
 }
 
-// QsortIndx : same as above, but preserves original slice index
+// QsortIndx same as above, but preserves original slice index
 // modified from: https://stackoverflow.com/questions/23276417/golang-custom-sort-is-faster-than-native-sort#23278451
 func QsortIndx(a QsortIndxInterface, prng *rand.Rand) []int {
 	if a.Len() < 2 {
@@ -100,7 +100,7 @@ func QsortIndx(a QsortIndxInterface, prng *rand.Rand) []int {
 	return a.Indices()
 }
 
-// QsortIndxInterface : interface to sort.Sort
+// QsortIndxInterface interface to sort.Sort
 type QsortIndxInterface interface {
 	sort.Interface
 	// Partition returns slice[:i] and slice[i+1:]
@@ -110,10 +110,20 @@ type QsortIndxInterface interface {
 	Indices() []int
 }
 
-// IndexedSlice : alias to float array being sorted
+// IndexedSlice alias to float array being sorted
 type IndexedSlice struct {
 	Indx []int
 	Val  []float64
+}
+
+// New IndexSlice constructor, default indices
+func (is IndexedSlice) New(v []float64) {
+	is.Indx = make([]int, len(v))
+	is.Val = make([]float64, len(v))
+	for i, v := range v {
+		is.Indx[i] = i
+		is.Val[i] = v
+	}
 }
 
 // Indices : returns the index property
@@ -134,7 +144,7 @@ func (is IndexedSlice) Swap(i, j int) {
 	is.Val[i], is.Val[j] = is.Val[j], is.Val[i]
 }
 
-// Partition : splits index array around pivot
+// Partition splits index array around pivot
 func (is IndexedSlice) Partition(i int) (left QsortIndxInterface, right QsortIndxInterface) {
 	left = IndexedSlice{
 		Indx: is.Indx[:i],
