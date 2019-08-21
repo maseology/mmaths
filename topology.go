@@ -1,5 +1,23 @@
 package mmaths
 
+// Node is a
+type Node struct {
+	ID     int
+	US, DS []*Node
+	p      chan int
+}
+
+// Leaves returns a slice of leaf nodes
+func Leaves(nodes map[int]*Node) []*Node {
+	var out []*Node
+	for _, v := range nodes {
+		if len(v.US) == 0 {
+			out = append(out, v)
+		}
+	}
+	return out
+}
+
 // OrderFromToTree returns the topological order of a set of from-to connections forming a tree graph
 func OrderFromToTree(fromto map[int]int, root int) []int {
 	ord := make([]int, 0, len(fromto))
