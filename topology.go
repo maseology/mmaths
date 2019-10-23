@@ -2,6 +2,8 @@ package mmaths
 
 import (
 	"fmt"
+	"log"
+	"math"
 
 	"github.com/maseology/mmio"
 )
@@ -83,7 +85,7 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 	return ord
 }
 
-// OrderedForest returns a concurrent-safe ordering of a set trees
+// OrderedForest returns a concurrent-safe optimized ordering of a set trees
 func OrderedForest(fromto map[int]int, root int) [][]int {
 	dg := NewDirectedGraph(fromto, root)
 	frst := dg.Forest()
@@ -102,6 +104,88 @@ func OrderedForest(fromto map[int]int, root int) [][]int {
 		return ifrst[0]
 	}
 
-	fmt.Println(len(frst), len(nord))
-	return nil
+	//optimize ifrst
+	sngl, multi, ox := []int{}, [][][]int{}, 0
+	for _, v := range ifrst {
+		switch len(v) {
+		case 1:
+			if len(v[0]) != 1 {
+				log.Fatalf("topology.go OrderedForest error 1\n")
+			}
+			sngl = append(sngl, v[0][0])
+		default:
+			multi = append(multi, v)
+			if len(v) > ox {
+				ox = len(v)
+			}
+		}
+	}
+	out := make([][]int, ox)
+	for i := 0; i < ox; i++ {
+		out[i] = []int{} // initialize
+	}
+	for _, v := range multi {
+		ii := ox - len(v)
+		for i := ii; i < ox; i++ {
+			out[i] = append(out[i], v[i-ii]...)
+		}
+	}
+
+	getMins := func() []int {
+		mn := math.MaxInt32
+		for _, v := range out {
+			if len(v) < mn {
+				mn = len(v)
+			}
+		}
+		ns := []int{}
+		for i, v := range out {
+			if len(v) == mn {
+				ns = append(ns, i)
+			}
+		}
+		return ns
+	}
+
+	ii := 0
+	for {
+		for _, i := range getMins() {
+			out[i] = append(out[i], sngl[ii])
+			ii++
+			if ii == len(sngl) {
+				break
+			}
+		}
+		if ii == len(sngl) {
+			break
+		}
+	}
+
+	// check
+	m := make(map[int]bool, len(fromto))
+	for i, v := range out {
+		fmt.Println(i, len(v))
+		for _, c := range v {
+			if _, ok := m[c]; ok {
+				log.Fatalf("topology.go OrderedForest error: duplicate node IDs found")
+			}
+			m[c] = false
+		}
+	}
+	for f := range fromto {
+		if _, ok := m[f]; !ok {
+			log.Fatalf("topology.go OrderedForest error: missing node ID: %d\n", f)
+		}
+	}
+	for _, v := range out {
+		for _, c := range v {
+			m[c] = true
+			t := fromto[c]
+			if t >= 0 && m[t] {
+				log.Fatalf("topology.go OrderedForest error: node out of order: from:%d to:%d\n", c, t)
+			}
+		}
+	}
+
+	return out
 }
