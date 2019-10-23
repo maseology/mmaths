@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// Round function -- previously "Round" but now included in math after Go v1.10
+// RoundTo previously "Round" but now included in math after Go v1.10
 func RoundTo(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
 	return math.Floor(f*shift+.5) / shift

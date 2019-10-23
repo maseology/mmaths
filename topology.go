@@ -1,20 +1,51 @@
 package mmaths
 
-// Node is a
+import (
+	"fmt"
+
+	"github.com/maseology/mmio"
+)
+
+// Node is a topological node
 type Node struct {
 	ID     int
 	US, DS []*Node
 	p      chan int
 }
 
+// Roots return nodes without downslope nodes
+func Roots(g []*Node) []*Node {
+	r := []*Node{}
+	for _, n := range g {
+		if len(n.DS) == 0 {
+			r = append(r, n)
+		}
+	}
+	return r
+}
+
 // Leaves returns a slice of leaf nodes
-func Leaves(nodes map[int]*Node) []*Node {
+func Leaves(g []*Node) []*Node {
 	var out []*Node
-	for _, v := range nodes {
+	for _, v := range g {
 		if len(v.US) == 0 {
 			out = append(out, v)
 		}
 	}
+	return out
+}
+
+// Climb returns the upstream nodes
+func (n *Node) Climb() []*Node {
+	out := []*Node{}
+	var recurs func(*Node)
+	recurs = func(nn *Node) {
+		out = append(out, nn)
+		for _, nnn := range nn.US {
+			recurs(nnn)
+		}
+	}
+	recurs(n)
 	return out
 }
 
@@ -48,6 +79,29 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 			}
 		}
 	}
-	Rev(ord)
+	mmio.Rev(ord)
 	return ord
+}
+
+// OrderedForest returns a concurrent-safe ordering of a set trees
+func OrderedForest(fromto map[int]int, root int) [][]int {
+	dg := NewDirectedGraph(fromto, root)
+	frst := dg.Forest()
+	ifrst, nord := make([][][]int, len(frst)), make([]int, len(frst))
+	for i, tree := range frst {
+		ifrst[i] = make([][]int, len(tree))
+		nord[i] = len(tree)
+		for j, ns := range tree {
+			ifrst[i][j] = make([]int, len(ns))
+			for k, n := range ns {
+				ifrst[i][j][k] = n.ID
+			}
+		}
+	}
+	if len(frst) == 1 {
+		return ifrst[0]
+	}
+
+	fmt.Println(len(frst), len(nord))
+	return nil
 }
