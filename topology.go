@@ -1,7 +1,6 @@
 package mmaths
 
 import (
-	"fmt"
 	"log"
 	"math"
 
@@ -163,8 +162,8 @@ func OrderedForest(fromto map[int]int, root int) [][]int {
 
 	// check
 	m := make(map[int]bool, len(fromto))
-	for i, v := range out {
-		fmt.Println(i, len(v))
+	for _, v := range out {
+		// fmt.Println(i, len(v))
 		for _, c := range v {
 			if _, ok := m[c]; ok {
 				log.Fatalf("topology.go OrderedForest error: duplicate node IDs found")
