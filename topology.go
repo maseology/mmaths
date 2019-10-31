@@ -87,6 +87,8 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 func OrderedForest(fromto map[int]int, root int) [][]int {
 	dg := NewDirectedGraph(fromto, root)
 	frst := dg.Forest()
+
+	// New
 	ifrst, tx := make([][][]int, len(frst)), 0
 	for i, tree := range frst {
 		ltree := len(tree)
