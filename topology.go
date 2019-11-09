@@ -88,7 +88,7 @@ func OrderedForest(fromto map[int]int, root int) [][]int {
 	dg := NewDirectedGraph(fromto, root)
 	frst := dg.Forest()
 
-	// New
+	// Bottom heavy
 	ifrst, tx := make([][][]int, len(frst)), 0
 	for i, tree := range frst {
 		ltree := len(tree)
@@ -123,7 +123,8 @@ func OrderedForest(fromto map[int]int, root int) [][]int {
 		}
 	}
 
-	// // OLD: worked as planned, but didn't seem to optimize my concurrent rdrr runs, could still have value..?
+	// // Distribute singles
+	// //  worked as planned, but didn't seem to optimize my concurrent rdrr runs, could still have value..?
 	// ifrst, nord := make([][][]int, len(frst)), make([]int, len(frst))
 	// for i, tree := range frst {
 	// 	ifrst[i] = make([][]int, len(tree))
