@@ -29,7 +29,7 @@ func (is IntSlice) Len() int {
 	return len(is)
 }
 
-// Partition : slits index array around pivot
+// Partition : splits index array around pivot
 func (is IntSlice) Partition(i int) (left QsortInterface, right QsortInterface) {
 	return IntSlice(is[:i]), IntSlice(is[i+1:])
 }
@@ -155,4 +155,20 @@ func (is IndexedSlice) Partition(i int) (left QsortIndxInterface, right QsortInd
 		Val:  is.Val[i+1:],
 	}
 	return
+}
+
+// SortMapInt returns an IndexedSlice sorted by value
+func SortMapInt(m map[int]int) ([]int, []int) {
+	vi, vf, ii := make([]int, len(m)), make([]float64, len(m)), 0
+	for k, v := range m {
+		vi[ii] = k
+		vf[ii] = float64(v)
+		ii++
+	}
+	sort.Sort(IndexedSlice{Indx: vi, Val: vf})
+	vfi := make([]int, len(m))
+	for i, v := range vf {
+		vfi[i] = int(v)
+	}
+	return vi, vfi
 }

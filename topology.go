@@ -2,8 +2,6 @@ package mmaths
 
 import (
 	"log"
-
-	"github.com/maseology/mmio"
 )
 
 // Node is a topological node
@@ -79,7 +77,7 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 			}
 		}
 	}
-	mmio.Rev(ord)
+	Rev(ord)
 	return ord
 }
 
