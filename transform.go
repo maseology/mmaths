@@ -21,5 +21,6 @@ func LogLinearTransform(l, h, u float64) float64 {
 	if u < 0.0 || u > 1.0 {
 		log.Fatalf("Log linear transform error, passing u = %v", u)
 	}
-	return math.Pow(10.0, math.Log10(l*math.Pow(h/l, u)))
+	// return math.Pow(10.0, math.Log10(l*math.Pow(h/l, u)))
+	return l * math.Pow(h/l, u)
 }
