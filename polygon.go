@@ -51,14 +51,15 @@ func sqdist(p1, p2 []float64) float64 {
 }
 
 // PnPolyC determins whether a point lies within a polygon (using complex coordinates)
-func PnPolyC(v []complex128, p complex128, withRigor bool) bool {
+func PnPolyC(v []complex128, p complex128, tolerance float64) bool {
 	vf := make([][]float64, len(v))
 	pf := []float64{real(p), imag(p)}
 	for i, c := range v {
 		vf[i] = []float64{real(c), imag(c)}
 	}
-	if withRigor {
-		return PnPolyLong(vf, pf, 0.00001)
-	}
-	return PnPoly(vf, pf)
+	// if withRigor {
+	// 	return PnPolyLong(vf, pf, .00001)
+	// }
+	// return PnPoly(vf, pf)
+	return PnPolyLong(vf, pf, tolerance)
 }
