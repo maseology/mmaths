@@ -9,11 +9,11 @@ type DirectedGraph struct {
 	r, n []*Node
 }
 
-// NewDirectedGraph builds a (directed) topologial graph
+// NewDirectedGraph builds a (directed) topological graph
 func NewDirectedGraph(fromto map[int]int, root int) DirectedGraph {
 	m := make(map[int]*Node, len(fromto))
 	for k := range fromto {
-		m[k] = &Node{ID: k}
+		m[k] = &Node{I: []int{k}}
 	}
 	r := []*Node{}
 	for k, v := range fromto {
@@ -50,7 +50,7 @@ func (dg DirectedGraph) Forest() [][][]*Node {
 			}
 			xr := make(map[int]int, len(us))
 			for i := 0; i < len(us); i++ {
-				xr[us[i].ID] = i
+				xr[us[i].I[0]] = i
 			}
 			cnt := make(map[int]int, len(us))
 			incr := func(i, v int) {
@@ -63,9 +63,9 @@ func (dg DirectedGraph) Forest() [][][]*Node {
 				}
 			}
 			for _, u := range us {
-				incr(u.ID, 0)
+				incr(u.I[0], 0)
 				for _, d := range u.DS {
-					incr(d.ID, cnt[u.ID])
+					incr(d.I[0], cnt[u.I[0]])
 				}
 			}
 
@@ -84,7 +84,7 @@ func (dg DirectedGraph) Forest() [][][]*Node {
 			// 	copy(cpy, mord[k])
 			// 	ord[i] = cpy
 			// }
-			ch <- col{r: r.ID, n: ord}
+			ch <- col{r: r.I[0], n: ord}
 		}(r)
 	}
 

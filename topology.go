@@ -6,9 +6,10 @@ import (
 
 // Node is a topological node
 type Node struct {
-	ID     int
+	S      []float64
+	I      []int
 	US, DS []*Node
-	p      chan int
+	// p      chan int
 }
 
 // Roots return nodes without downslope nodes
@@ -27,6 +28,17 @@ func Leaves(g []*Node) []*Node {
 	var out []*Node
 	for _, v := range g {
 		if len(v.US) == 0 {
+			out = append(out, v)
+		}
+	}
+	return out
+}
+
+// Junctions returns a slice of nodes having more than one connection either downstream or upstream
+func Junctions(g []*Node) []*Node {
+	var out []*Node
+	for _, v := range g {
+		if len(v.US) > 1 || len(v.DS) > 1 {
 			out = append(out, v)
 		}
 	}
@@ -71,7 +83,7 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 		ord = append(ord, x)
 		queue = queue[1:]
 		// push
-		if f, ok := tofrom[x]; ok { // othwise leaves
+		if f, ok := tofrom[x]; ok { // otherwise leaves
 			for _, v := range f {
 				queue = append(queue, v)
 			}
@@ -82,7 +94,7 @@ func OrderFromToTree(fromto map[int]int, root int) []int {
 }
 
 // OrderedForest returns a concurrent-safe optimized ordering of a set trees
-func OrderedForest(fromto map[int]int, root int) [][]int {
+func OrderedForest(fromto map[int]int, root, ad int) [][]int {
 	dg := NewDirectedGraph(fromto, root)
 	frst := dg.Forest()
 
@@ -98,7 +110,7 @@ func OrderedForest(fromto map[int]int, root int) [][]int {
 			jj := ltree - j - 1
 			ifrst[i][jj] = make([]int, len(ns))
 			for k, n := range ns {
-				ifrst[i][jj][k] = n.ID
+				ifrst[i][jj][k] = n.I[0]
 			}
 		}
 	}
