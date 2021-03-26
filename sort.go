@@ -117,7 +117,7 @@ type IndexedSlice struct {
 }
 
 // New IndexSlice constructor, default indices
-func (is IndexedSlice) New(v []float64) {
+func (is *IndexedSlice) New(v []float64) {
 	is.Indx = make([]int, len(v))
 	is.Val = make([]float64, len(v))
 	for i, v := range v {
@@ -169,6 +169,22 @@ func SortMapInt(m map[int]int) ([]int, []int) {
 	vfi := make([]int, len(m))
 	for i, v := range vf {
 		vfi[i] = int(v)
+	}
+	return vi, vfi
+}
+
+// SortMapFloat returns the key-values sorted by value
+func SortMapFloat(m map[int]float64) ([]int, []float64) {
+	vi, vf, ii := make([]int, len(m)), make([]float64, len(m)), 0
+	for k, v := range m {
+		vi[ii] = k
+		vf[ii] = v
+		ii++
+	}
+	sort.Sort(IndexedSlice{Indx: vi, Val: vf})
+	vfi := make([]float64, len(m))
+	for i, v := range vf {
+		vfi[i] = v
 	}
 	return vi, vfi
 }
