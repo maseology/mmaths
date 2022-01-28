@@ -110,7 +110,7 @@ type QsortIndxInterface interface {
 	Indices() []int
 }
 
-// IndexedSlice alias to float array being sorted
+// IndexedSlice alias to float array being sorted and interfaces to Go-native sort.Sort
 type IndexedSlice struct {
 	Indx []int
 	Val  []float64
@@ -126,7 +126,7 @@ func (is *IndexedSlice) New(v []float64) {
 	}
 }
 
-// Indices : returns the index property
+// Indices returns the index property
 func (is IndexedSlice) Indices() []int {
 	return is.Indx
 }

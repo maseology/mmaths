@@ -1,8 +1,6 @@
-package mmaths
+package topology
 
-import (
-	"github.com/maseology/mmio"
-)
+import "github.com/maseology/mmaths/slice"
 
 // DirectedGraph is a set of nodes
 type DirectedGraph struct {
@@ -69,7 +67,7 @@ func (dg DirectedGraph) Forest() [][][]*Node {
 				}
 			}
 
-			mord, lord := mmio.InvertMap(cnt)
+			mord, lord := slice.InvertMap(cnt)
 			ord := make([][]*Node, len(lord)) // concurrent-safe ordering of nodes
 			for i, k := range lord {
 				cpy := make([]*Node, len(mord[k]))

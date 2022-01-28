@@ -1,81 +1,53 @@
 package mmaths
 
-type binaryNode struct {
-	left  *binaryNode
-	right *binaryNode
-	val   float64
-	indx  int
+type BinaryNode struct {
+	Left  *BinaryNode
+	Right *BinaryNode
+	Val   float64
+	Indx  int
 }
 
 // IndexOf -1: place at start; n: place at end; i: place after i, before i+1
-func (n *binaryNode) IndexOf(val float64) int {
+func (n *BinaryNode) IndexOf(val float64) int {
 	i := -2
 	n.Search(&val, &i)
 	return i
 }
 
-func (n *binaryNode) Search(val *float64, sid *int) {
+func (n *BinaryNode) Search(val *float64, sid *int) {
 	if *sid <= -2 {
-		if *val > n.val {
-			if n.right == nil {
-				*sid = n.indx
+		if *val > n.Val {
+			if n.Right == nil {
+				*sid = n.Indx
 			} else {
-				n.right.Search(val, sid)
+				n.Right.Search(val, sid)
 			}
-		} else if *val < n.val {
-			if n.left == nil {
-				*sid = n.indx - 1
+		} else if *val < n.Val {
+			if n.Left == nil {
+				*sid = n.Indx - 1
 			} else {
-				n.left.Search(val, sid)
+				n.Left.Search(val, sid)
 			}
 		} else {
-			*sid = n.indx
+			*sid = n.Indx
 		}
 	}
 }
 
-// modified from: https://www.golangprograms.com/golang-program-to-implement-binary-tree.html
-// type BinaryTree struct { // not yet used
-// 	root *binaryNode
-// }
+func (node *BinaryNode) AddNode(is *IndexedSlice, first, last int) {
+	// from a uniform distribution, picks a "balanced" tree
+	if first <= last {
+		nid := first + (last-first)/2 // median node. same as (first+last)/2, avoids overflow
+		node.Indx = is.Indx[nid]
+		node.Val = is.Val[nid]
 
-// // Insert node: the first entered becomes the root
-// func (t *BinaryTree) Insert(indx int, val float64) *BinaryTree {
-// 	if t.root == nil {
-// 		t.root = &binaryNode{val: val, indx: indx, left: nil, right: nil}
-// 	} else {
-// 		t.root.insert(val, indx)
-// 	}
-// 	return t
-// }
-
-// func (n *binaryNode) insert(val float64, indx int) {
-// 	if n == nil {
-// 		return
-// 	} else if val <= n.val {
-// 		if n.left == nil {
-// 			n.left = &binaryNode{val: val, indx: indx, left: nil, right: nil}
-// 		} else {
-// 			n.left.insert(val, indx)
-// 		}
-// 	} else {
-// 		if n.right == nil {
-// 			n.right = &binaryNode{val: val, indx: indx, left: nil, right: nil}
-// 		} else {
-// 			n.right.insert(val, indx)
-// 		}
-// 	}
-// }
-
-// func print(w io.Writer, node *binaryNode, ns int, ch rune) {
-// 	if node == nil {
-// 		return
-// 	}
-
-// 	for i := 0; i < ns; i++ {
-// 		fmt.Fprint(w, " ")
-// 	}
-// 	fmt.Fprintf(w, "%c:%v\n", ch, node.val)
-// 	print(w, node.left, ns+2, 'L')
-// 	print(w, node.right, ns+2, 'R')
-// }
+		if first <= nid-1 {
+			node.Left = &BinaryNode{}
+			node.Left.AddNode(is, first, nid-1)
+		}
+		if nid+1 <= last {
+			node.Right = &BinaryNode{}
+			node.Right.AddNode(is, nid+1, last)
+		}
+	}
+}

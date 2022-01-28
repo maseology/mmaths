@@ -1,8 +1,6 @@
 package mmaths
 
-import (
-	"math"
-)
+import "math"
 
 // LineSegment represents a stright line between two points
 type LineSegment struct {
