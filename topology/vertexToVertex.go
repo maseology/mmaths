@@ -1,6 +1,6 @@
 package topology
 
-func VertexToVertex(nds []*Node) []*Node {
+func VertexToVertex(nds []*Node) ([]*Node, map[int]*Node) {
 	tnds, nv := make([][]*Node, len(nds)), 0
 	for i, n := range nds {
 		if n.I[1] != i {
@@ -9,8 +9,10 @@ func VertexToVertex(nds []*Node) []*Node {
 		tnds[i] = n.Segmentize()
 		nv += len(tnds[i]) - 1
 	}
+	segUpNode := make(map[int]*Node, len(nds))
 	for i, n := range nds {
 		usv := tnds[i][len(tnds[i])-1] // upstream-most vertex
+		segUpNode[i] = usv
 		if usv.US != nil {
 			panic("assumption fail")
 		}
@@ -37,5 +39,5 @@ func VertexToVertex(nds []*Node) []*Node {
 		}
 	}
 
-	return verts
+	return verts, segUpNode
 }
