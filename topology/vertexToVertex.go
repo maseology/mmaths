@@ -12,7 +12,6 @@ func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
 	segUpDwnNode := make(map[int][2]*Node, len(nds))
 	for i, n := range nds {
 		usv := tnds[i][len(tnds[i])-1] // upstream-most vertex
-		segUpDwnNode[i] = [2]*Node{usv, tnds[i][0]}
 		if usv.US != nil {
 			panic("assumption fail")
 		}
@@ -21,6 +20,7 @@ func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
 			unds.DS = []*Node{usv}  // overwrite
 			usv.US = append(usv.US, unds)
 		}
+		segUpDwnNode[i] = [2]*Node{usv, tnds[i][0]}
 	}
 
 	verts := make([]*Node, nv)
