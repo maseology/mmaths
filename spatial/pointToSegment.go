@@ -50,7 +50,7 @@ retry:
 			isegs = []int{isegs[iclose]}
 		}
 	}
-	if isegs == nil {
+	if len(isegs) == 0 {
 		return PointPolylineConnection{}, nil
 	}
 	return PointPolylineConnection{
