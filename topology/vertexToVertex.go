@@ -1,6 +1,6 @@
 package topology
 
-func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
+func VertexToVertex(nds []*Node) ([]*Node, map[int][]*Node) {
 	tnds, nv := make([][]*Node, len(nds)), 0
 	for i, n := range nds {
 		if n.I[1] != i {
@@ -9,7 +9,7 @@ func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
 		tnds[i] = n.Segmentize()
 		nv += len(tnds[i]) - 1
 	}
-	segUpDwnNode := make(map[int][2]*Node, len(nds))
+	segUpDwnNode := make(map[int][]*Node, len(nds))
 	for i, n := range nds {
 		usv := tnds[i][len(tnds[i])-1] // upstream-most vertex
 		if usv.US != nil {
@@ -20,7 +20,7 @@ func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
 			unds.DS = []*Node{usv}  // overwrite
 			usv.US = append(usv.US, unds)
 		}
-		segUpDwnNode[i] = [2]*Node{usv, tnds[i][0]}
+		segUpDwnNode[i] = []*Node{usv, tnds[i][0]}
 	}
 
 	verts := make([]*Node, nv)
@@ -38,6 +38,11 @@ func VertexToVertex(nds []*Node) ([]*Node, map[int][2]*Node) {
 			verts[c] = ns[j]
 			c++
 		}
+	}
+
+	// final fix
+	for _, nd := range segUpDwnNode {
+		nd[1].I = nd[0].I
 	}
 
 	return verts, segUpDwnNode
