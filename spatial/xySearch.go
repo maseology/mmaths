@@ -12,7 +12,7 @@ type XYsearch struct {
 	xr [2][]int // indx to order
 }
 
-func (xys *XYsearch) New(pts [][2]float64) {
+func (xys *XYsearch) New(pts [][]float64) {
 
 	xs, ys := make([]float64, len(pts)), make([]float64, len(pts))
 	for i, c := range pts {
@@ -76,7 +76,7 @@ func (xys *XYsearch) Value3(i int) [3]float64 {
 	}
 }
 
-func (xys *XYsearch) ClosestIDs(pt [2]float64, searchRadius float64) ([]int, []float64) {
+func (xys *XYsearch) ClosestIDs(pt []float64, searchRadius float64) ([]int, []float64) {
 	// collect closest points
 	chc := make(chan map[int]bool)
 	closest1D := func(dim int) {
@@ -183,7 +183,7 @@ func (xys *XYsearch) ClosestIDs(pt [2]float64, searchRadius float64) ([]int, []f
 
 	sr2 := searchRadius * searchRadius
 	cocoll := map[int]float64{}
-	dist2 := func(p, q [2]float64) float64 {
+	dist2 := func(p, q []float64) float64 {
 		s2 := 0.
 		for i := 0; i < 2; i++ {
 			ds := q[i] - p[i]
@@ -194,9 +194,9 @@ func (xys *XYsearch) ClosestIDs(pt [2]float64, searchRadius float64) ([]int, []f
 	for i := range c0 {
 		if _, ok := c1[i]; ok {
 			xi, yi := xys.xr[0][i], xys.xr[1][i] // feature order
-			d := dist2(pt, [...]float64{xys.is[0].Val[xi], xys.is[1].Val[yi]})
-			if d < sr2 {
-				cocoll[i] = d
+			d2 := dist2(pt, []float64{xys.is[0].Val[xi], xys.is[1].Val[yi]})
+			if d2 < sr2 {
+				cocoll[i] = d2
 			}
 		}
 	}

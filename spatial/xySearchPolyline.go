@@ -11,7 +11,7 @@ type XYlineSearch struct {
 	chain [][]float64
 }
 
-func (xys *XYlineSearch) New(segs [][][2]float64) {
+func (xys *XYlineSearch) New(segs [][][]float64) {
 	xys.sseg = make([]*XYsearch, len(segs))
 	xys.chain = make([][]float64, len(segs))
 	for i, s := range segs {
@@ -27,7 +27,7 @@ func (xys *XYlineSearch) New(segs [][][2]float64) {
 	}
 }
 
-func (xys *XYlineSearch) ClosestID(pt [2]float64) (int, float64, float64, float64, [2]float64) { // brute force
+func (xys *XYlineSearch) ClosestID(pt []float64) (int, float64, float64, float64, [2]float64) { // brute force
 	dn, fchsv, lnsv, isv, opsv := math.MaxFloat64, -1., -1., -1, [2]float64{-1, -1}
 	for i, s := range xys.sseg {
 		ids, _ := s.ClosestIDs(pt, math.MaxFloat64)

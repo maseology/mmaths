@@ -34,14 +34,14 @@ retry:
 	default:
 		// fmt.Print(isegs)
 		var srchsegs XYlineSearch
-		segs := make([][][2]float64, len(isegs))
+		segs := make([][][]float64, len(isegs))
 		for i, id := range isegs {
 			segs[i] = sgs.Segs[id]
 		}
 		srchsegs.New(segs)
 		// iclose, dist := srchsegs.ClosestID([2]float64{p.X, p.Y})
-		iclose, dist, fchain, totlen, opt = srchsegs.ClosestID([2]float64{x, y}) // trial 2: search by distance to line segment
-		fchain = 1. - fchain                                                     // chain is returned in an upstream direction
+		iclose, dist, fchain, totlen, opt = srchsegs.ClosestID([]float64{x, y}) // trial 2: search by distance to line segment
+		fchain = 1. - fchain                                                    // chain is returned in an upstream direction
 		if iclose < 0 {
 			// fmt.Println("  none")
 			isegs = nil

@@ -3,14 +3,14 @@ package spatial
 import "fmt"
 
 func JunctionToJunction(plns [][][3]float64, nodethresh float64) [][][3]float64 {
-	pts, zs, eps, meps, nvert := [][2]float64{}, []float64{}, []int{}, make(map[int]bool, len(plns)), 0
+	pts, zs, eps, meps, nvert := [][]float64{}, []float64{}, []int{}, make(map[int]bool, len(plns)), 0
 	for _, pln := range plns {
 		np := len(pln)
 		if np == 0 {
 			continue
 		}
 		for _, v := range pln {
-			pts = append(pts, [...]float64{v[0], v[1]})
+			pts = append(pts, []float64{v[0], v[1]})
 			zs = append(zs, v[2])
 		}
 		eps = append(eps, nvert+np-1) // endpoint IDs
