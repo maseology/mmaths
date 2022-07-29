@@ -10,6 +10,9 @@ func DouglasPeucker(plns [][][]float64, epsilon float64) ([][][]float64, int) {
 		for i := range p0 {
 			diff := p0[i] - p1[i]
 			d2 += diff * diff
+			if i == 3 {
+				break
+			}
 		}
 		return d2 < .001
 	}
