@@ -174,7 +174,7 @@ func SortMapInt(m map[int]int) ([]int, []int) {
 }
 
 // SortMapFloat returns the key-values sorted by value
-func SortMapFloat(m map[int]float64) ([]int, []float64) {
+func SortMapFloat(m map[int]float64, reverse bool) ([]int, []float64) {
 	vi, vf, ii := make([]int, len(m)), make([]float64, len(m)), 0
 	for k, v := range m {
 		vi[ii] = k
@@ -185,6 +185,12 @@ func SortMapFloat(m map[int]float64) ([]int, []float64) {
 	vfi := make([]float64, len(m))
 	for i, v := range vf {
 		vfi[i] = v
+	}
+	if reverse {
+		for i, j := 0, len(vi)-1; i < j; i, j = i+1, j-1 {
+			vi[i], vi[j] = vi[j], vi[i]
+			vfi[i], vfi[j] = vfi[j], vfi[i]
+		}
 	}
 	return vi, vfi
 }
