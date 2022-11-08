@@ -200,5 +200,5 @@ func (xys *XYsearch) ClosestIDs(pt []float64, searchRadius float64) ([]int, []fl
 			}
 		}
 	}
-	return mmaths.SortMapFloat(cocoll) // point IDs, distances -- sorted by distance
+	return mmaths.SortMapFloat(cocoll, false) // point IDs, distances -- sorted by distance
 }
