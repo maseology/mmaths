@@ -15,3 +15,17 @@ func Distinct(ints []int) []int {
 	}
 	return l
 }
+
+func DistinctFloats(floats []float64) []float64 {
+	k := make(map[float64]bool)
+	for _, v := range floats {
+		if _, ok := k[v]; !ok {
+			k[v] = true
+		}
+	}
+	l := make([]float64, 0, len(k))
+	for v := range k {
+		l = append(l, v)
+	}
+	return l
+}
