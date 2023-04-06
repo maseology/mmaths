@@ -28,12 +28,16 @@ func PointToLine(pnt, start, end [3]float64) (float64, float64, [3]float64) {
 	line_unitvec := Unit(line_vec)
 	pnt_vec_scaled := Scale(pnt_vec, 1.0/line_len)
 	t := Dot(line_unitvec, pnt_vec_scaled)
-	if t < 0.0 {
-		t = 0.0
-	} else if t > 1. {
-		t = 1.
-	}
-	nearest := Scale(line_vec, t)
+	nearest := func() [3]float64 {
+		if t < 0. {
+			// t = 0.
+			return Scale(line_vec, 0.)
+		} else if t > 1. {
+			// t = 1.
+			return Scale(line_vec, 1.)
+		}
+		return Scale(line_vec, t)
+	}()
 	dist := Distance(nearest, pnt_vec)
 	nearest = Add(nearest, start)
 	return dist, t, nearest

@@ -39,6 +39,29 @@ func (ls *LineSegment) IntersectionY(y float64) *Point {
 	return nil
 }
 
+func (ls *LineSegment) Intersects(p *Point, toWithin float64) bool {
+
+	// first check distance to vertices
+	if ls.P0.Distance(p) < toWithin || ls.P1.Distance(p) < toWithin {
+		return true
+	}
+
+	// check distance to 2-point line segment
+	p2 := func(v float64) float64 {
+		return math.Pow(v, 2.)
+	}
+	if math.Abs((ls.P1.Y-ls.P0.Y)*p.X-(ls.P1.X-ls.P0.X)*p.Y+ls.P1.X*ls.P0.Y-ls.P1.Y*ls.P0.X)/math.Sqrt(p2(ls.P1.Y-ls.P0.Y)+p2(ls.P1.X-ls.P0.X)) < toWithin { // perpendicular distance
+		//  check if point projects onto line
+		c := p2(ls.P0.Distance(&ls.P1))
+		a := p2(ls.P0.Distance(p))
+		b := p2(ls.P1.Distance(p))
+		if c >= a+b {
+			return true
+		}
+	}
+	return false
+}
+
 // Intersection2D returns the 2D intersection of two line segments. Returns nil if lines do not intersect.
 func (l0 *LineSegment) Intersection2D(l1 *LineSegment) (Point, float64) {
 	// first degree Bézier parameter
