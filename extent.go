@@ -31,7 +31,7 @@ func (ex *Extent) Radius() float64 {
 	return math.Sqrt(dx*dx + dy*dy)
 }
 
-func (ex *Extent) Contains(p *Point) bool {
+func (ex *Extent) Contains(p Point) bool {
 	if p.X >= ex.Xn && p.X <= ex.Xx {
 		if p.Y >= ex.Yn && p.Y <= ex.Yx {
 			return true

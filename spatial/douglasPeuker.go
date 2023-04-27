@@ -2,19 +2,18 @@ package spatial
 
 import "github.com/maseology/mmaths/vector"
 
+const nearthrsh = .001
+
 // DouglasPeucker the Ramer–Douglas–Peucker algorithm
 // see: https://en.wikipedia.org/wiki/Ramer%E2%80%93Douglas%E2%80%93Peucker_algorithm
 func DouglasPeucker(plns [][][]float64, epsilon float64) ([][][]float64, [][]int, int) {
 	isnear := func(p0, p1 []float64) bool {
 		d2 := 0.
-		for i := range p0 {
+		for i := 0; i < 2; i++ {
 			diff := p0[i] - p1[i]
 			d2 += diff * diff
-			if i == 3 {
-				break
-			}
 		}
-		return d2 < .001
+		return d2 < nearthrsh
 	}
 	remove := func(seg [][]float64, pos []int, s int) ([][]float64, []int) {
 		return append(seg[:s], seg[s+1:]...), append(pos[:s], pos[s+1:]...)
@@ -59,10 +58,12 @@ func DouglasPeucker(plns [][][]float64, epsilon float64) ([][][]float64, [][]int
 			}
 		}
 		recurse(0, len(pln)-1)
+		rm[0] = true
+		rm[len(pln)-1] = true
 
 		for i := len(pln) - 1; i >= 0; i-- {
 			if !rm[i] {
-				pln, ipos = remove(pln, ipos, len(pln)-1)
+				pln, ipos = remove(pln, ipos, i)
 			}
 		}
 		plns[plid] = pln
