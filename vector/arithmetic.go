@@ -9,6 +9,15 @@ func Dot(v, w [3]float64) float64 {
 	return x*X + y*Y + z*Z
 }
 
+func Cross(v, w [3]float64) [3]float64 {
+	x, y, z := v[0], v[1], v[2]
+	X, Y, Z := w[0], w[1], w[2]
+	c0 := y*Z - Y*z
+	c1 := z*X - Z*x
+	c2 := x*Y - X*y
+	return [3]float64{c0, c1, c2}
+}
+
 func Length(v [3]float64) float64 {
 	x, y, z := v[0], v[1], v[2]
 	return math.Sqrt(x*x + y*y + z*z)
@@ -39,6 +48,12 @@ func Add(v, w [3]float64) [3]float64 {
 	x, y, z := v[0], v[1], v[2]
 	X, Y, Z := w[0], w[1], w[2]
 	return [3]float64{x + X, y + Y, z + Z}
+}
+
+func Subtract(v, w [3]float64) [3]float64 {
+	x, y, z := v[0], v[1], v[2]
+	X, Y, Z := w[0], w[1], w[2]
+	return [3]float64{x - X, y - Y, z - Z}
 }
 
 func Angle2d(b, e [3]float64) float64 {
