@@ -8,3 +8,7 @@ func Wateryear(dt time.Time) int {
 	}
 	return dt.Year() + 1
 }
+
+func Dateday(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+}
