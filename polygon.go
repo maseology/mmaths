@@ -1,8 +1,6 @@
 package mmaths
 
-import (
-	"math"
-)
+import "math"
 
 // PnPoly determins whether a point lies within a polygon
 func PnPoly(v [][]float64, p []float64) bool {
