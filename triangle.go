@@ -22,6 +22,12 @@ func (t *Triangle) EdgeLengths() []float64 {
 	return []float64{t.P0.Distance(t.P1), t.P1.Distance(t.P2), t.P2.Distance(t.P0)}
 }
 
+func (t *Triangle) Extent() Extent {
+	var ex Extent
+	ex.New([][]float64{t.P0.ToArray(), t.P1.ToArray(), t.P2.ToArray()})
+	return ex
+}
+
 func (t *Triangle) Contains(x, y float64) bool {
 	pnt := Point{x, y, 0., 0.}
 	vector := func(b, e Point) Point {
