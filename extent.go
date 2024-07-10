@@ -39,3 +39,10 @@ func (ex *Extent) Contains(p Point) bool {
 	}
 	return false
 }
+
+func (ex *Extent) Intersects(ex1 Extent, buffer float64) bool {
+	if ex.Xx < ex1.Xn-buffer || ex1.Xx < ex.Xn-buffer || ex.Yn > ex1.Yx+buffer || ex1.Yn > ex.Yx+buffer {
+		return false
+	}
+	return true
+}

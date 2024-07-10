@@ -2,7 +2,7 @@ package mmaths
 
 import "math"
 
-// PnPoly determins whether a point lies within a polygon
+// PnPoly determines whether a point lies within a polygon
 func PnPoly(v [][]float64, p []float64) bool {
 	nvert, b := len(v), true
 	for i, j := 0, nvert-1; i < nvert; i, j = i+1, i {
@@ -13,11 +13,20 @@ func PnPoly(v [][]float64, p []float64) bool {
 	return !b
 }
 
-// PnPolyLong determins whether a point lies within a polygon with more rigor: PnPoly requires the point to be completely within prism
+// PnPolyLong determines whether a point lies within a polygon with more rigor: PnPoly requires the point to be completely within prism
 func PnPolyLong(v [][]float64, p []float64, tol float64) bool {
 	if PnPoly(v, p) {
 		return true
 	}
+
+	// distance functions
+	sqdist := func(p1, p2 []float64) float64 {
+		return math.Pow(p1[0]-p2[0], 2.0) + math.Pow(p1[1]-p2[1], 2.0)
+	}
+	perpdist := func(p, p1, p2 []float64) float64 {
+		return math.Abs((p2[1]-p1[1])*p[0]-(p2[0]-p1[0])*p[1]+p2[0]*p1[1]-p2[1]*p1[0]) / math.Sqrt(sqdist(p1, p2))
+	}
+
 	// first check distance to vertices
 	for _, v := range v {
 		if math.Sqrt(sqdist(p, v)) < tol {
@@ -41,14 +50,8 @@ func PnPolyLong(v [][]float64, p []float64, tol float64) bool {
 	}
 	return false
 }
-func perpdist(p, p1, p2 []float64) float64 {
-	return math.Abs((p2[1]-p1[1])*p[0]-(p2[0]-p1[0])*p[1]+p2[0]*p1[1]-p2[1]*p1[0]) / math.Sqrt(sqdist(p1, p2))
-}
-func sqdist(p1, p2 []float64) float64 {
-	return math.Pow(p1[0]-p2[0], 2.0) + math.Pow(p1[1]-p2[1], 2.0)
-}
 
-// PnPolyC determins whether a point lies within a polygon (using complex coordinates)
+// PnPolyC determines whether a point lies within a polygon (using complex coordinates)
 func PnPolyC(v []complex128, p complex128, tolerance float64) bool {
 	vf := make([][]float64, len(v))
 	pf := []float64{real(p), imag(p)}
