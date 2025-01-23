@@ -5,8 +5,8 @@ import (
 	"sort"
 )
 
-// SliceMax returns the maximum value of a slice
-func SliceMax(s []float64) float64 {
+// Max returns the maximum value of a slice
+func Max(s []float64) float64 {
 	x := -math.MaxFloat64
 	for _, v := range s {
 		x = math.Max(x, v)
@@ -14,8 +14,8 @@ func SliceMax(s []float64) float64 {
 	return x
 }
 
-// SliceMin returns the minimum value of a slice
-func SliceMin(s []float64) float64 {
+// Min returns the minimum value of a slice
+func Min(s []float64) float64 {
 	x := math.MaxFloat64
 	for _, v := range s {
 		x = math.Min(x, v)
@@ -23,8 +23,8 @@ func SliceMin(s []float64) float64 {
 	return x
 }
 
-// SliceMean returns the mean value of a slice
-func SliceMean(s []float64) float64 {
+// Mean returns the mean value of a slice
+func Mean(s []float64) float64 {
 	x := 0.
 	for _, v := range s {
 		x += v
@@ -32,19 +32,19 @@ func SliceMean(s []float64) float64 {
 	return x / float64(len(s))
 }
 
-// SliceMedian returns the median value of a slice
-func SliceMedian(s []float64) float64 {
+// Median returns the median value of a slice
+func Median(s []float64) float64 {
 	sort.Float64s(s)
 	return s[int(float64(len(s)/2.))]
 }
 
-func SliceMed90(s []float64) (_, _, _ float64) {
+func Med90(s []float64) (_, _, _ float64) {
 	sort.Float64s(s)
 	ns := float64(len(s))
 	return s[int(ns/2.)], s[int(ns*.05)], s[int(ns*.95)]
 }
 
-func SliceMinMaxMean(s []float64) (_, _, _ float64) {
+func MinMaxMean(s []float64) (_, _, _ float64) {
 	x, n, m := -math.MaxFloat64, math.MaxFloat64, 0.
 	for _, v := range s {
 		x = math.Max(x, v)
@@ -54,7 +54,7 @@ func SliceMinMaxMean(s []float64) (_, _, _ float64) {
 	return n, x, m / float64(len(s))
 }
 
-func SliceMeansd(d []float64) (float64, float64) {
+func MeanSD(d []float64) (float64, float64) {
 	c, s, ss := 0, 0., 0.
 	for i := 0; i < len(d); i++ {
 		if math.IsNaN(d[i]) {
