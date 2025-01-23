@@ -38,6 +38,7 @@ func Median(s []float64) float64 {
 	return s[int(float64(len(s)/2.))]
 }
 
+// Med90 return the median, p5 and p95 of slice
 func Med90(s []float64) (_, _, _ float64) {
 	sort.Float64s(s)
 	ns := float64(len(s))
