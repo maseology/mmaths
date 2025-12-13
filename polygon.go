@@ -58,9 +58,10 @@ func PnPolyC(v []complex128, p complex128, tolerance float64) bool {
 	for i, c := range v {
 		vf[i] = []float64{real(c), imag(c)}
 	}
-	// if withRigor {
-	// 	return PnPolyLong(vf, pf, .00001)
-	// }
 	// return PnPoly(vf, pf)
+	// // if withRigor {
+	// // 	return PnPolyLong(vf, pf, .00001)
+	// // }
+	// // return PnPoly(vf, pf)
 	return PnPolyLong(vf, pf, tolerance)
 }
