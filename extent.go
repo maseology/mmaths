@@ -2,15 +2,16 @@ package mmaths
 
 import "math"
 
-// Extent is a 2D square spatial extent
+// Extent is a 2D square spatial extent [Xn, Xx, Yn, Yx]
 type Extent struct{ Xn, Xx, Yn, Yx float64 }
 
-func (ex *Extent) New(s [][]float64) {
+// New creates the extent that encompasses all n points s
+func (ex *Extent) New(xys [][]float64) {
 	ex.Xn = math.MaxFloat64
 	ex.Xx = -math.MaxFloat64
 	ex.Yn = math.MaxFloat64
 	ex.Yx = -math.MaxFloat64
-	for _, c := range s {
+	for _, c := range xys {
 		if c[0] < ex.Xn {
 			ex.Xn = c[0]
 		}
