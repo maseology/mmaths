@@ -158,7 +158,7 @@ func (is IndexedSlice) Partition(i int) (left QsortIndxInterface, right QsortInd
 }
 
 // SortMapInt returns an IndexedSlice sorted by value
-func SortMapInt(m map[int]int) ([]int, []int) {
+func SortMapInt(m map[int]int, reverse bool) ([]int, []int) {
 	vi, vf, ii := make([]int, len(m)), make([]float64, len(m)), 0
 	for k, v := range m {
 		vi[ii] = k
@@ -169,6 +169,12 @@ func SortMapInt(m map[int]int) ([]int, []int) {
 	vfi := make([]int, len(m))
 	for i, v := range vf {
 		vfi[i] = int(v)
+	}
+	if reverse {
+		for i, j := 0, len(vi)-1; i < j; i, j = i+1, j-1 {
+			vi[i], vi[j] = vi[j], vi[i]
+			vfi[i], vfi[j] = vfi[j], vfi[i]
+		}
 	}
 	return vi, vfi
 }
@@ -183,9 +189,7 @@ func SortMapFloat(m map[int]float64, reverse bool) ([]int, []float64) {
 	}
 	sort.Sort(IndexedSlice{Indx: vi, Val: vf})
 	vfi := make([]float64, len(m))
-	for i, v := range vf {
-		vfi[i] = v
-	}
+	copy(vfi, vf)
 	if reverse {
 		for i, j := 0, len(vi)-1; i < j; i, j = i+1, j-1 {
 			vi[i], vi[j] = vi[j], vi[i]
